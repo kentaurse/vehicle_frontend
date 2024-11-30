@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate, NavLink, useLocation } from "react-router-dom";
+import React, { useState, useContext } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
 import { ThemeContext } from 'src/components/Theme';
 import Navbar from 'src/components/Navbar';
 import LogoMenu from 'src/components/menu/LogoMenu';
 import { SunOutlined, MoonOutlined, MenuOutlined, BellOutlined, SearchOutlined } from '@ant-design/icons';
 import { Avatar, Badge, Button, Drawer, Image, Input, Typography } from 'antd';
+import generatePDF from 'react-to-pdf';
 const { Text } = Typography;
 
 const list = [
@@ -19,10 +19,9 @@ const list = [
   { key: 'settings_administration', value: '設定・管理' }
 ];
 
-const Header = ({ items, ...props }) => {
+const Header = ({ items, targetRef, ...props }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { userName } = useSelector(state => state.user);
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [openNav, setOpenNav] = useState(false);
   const [openSide, setOpenSide] = useState(false);
@@ -55,6 +54,7 @@ const Header = ({ items, ...props }) => {
         <div className='pr-2'>
           <Input placeholder='Type keywords...' prefix={<SearchOutlined />} suffix={<Text keyboard>Ctrl K</Text>} className='hidden sm:inline-flex rounded-full bg-transparent' />
         </div>
+        <Button type='primary' onClick={() => generatePDF(targetRef, {filename: 'page.pdf'})}>PDF</Button>
         <div className='flex justify-center items-center gap-2'>
           <Badge count={5} color="hsl(102, 70%, 61%)">
             <Button shape='circle' icon={<BellOutlined />} />
